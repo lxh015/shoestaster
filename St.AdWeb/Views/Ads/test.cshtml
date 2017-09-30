@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "test";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="page-wrapper">
+    <h2>test</h2>
+
+    <button class="btn" id="tj">提交</button>
+</div>
+    <script>
+        $("#tj").click(function () {
+            var id = "1";
+            var name = "2";
+            var title = 3;
+            var context = 4;
+
+            $.ajax({
+                url: "/Ads/TestPost",
+                type: "post",
+                data: { id: id, name: name, title: title, context: context }
+            }).done(function (data) {
+                alert(data);
+            })
+        })
+    </script>
+

@@ -1,0 +1,169 @@
+﻿
+@{
+    ViewBag.Title = "图片处理";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    bool hasData = ViewBag.IM != null;
+    var picture = hasData ? ViewBag.IM as St.Domain.Entity.Picture.Images : null;
+}
+<link href="~/Content/default/layer.css" rel="stylesheet" />
+<link href="~/Content/layui.css" rel="stylesheet" />
+
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header" style="font-size:36px!important">@ViewBag.Title</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    添加图片
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <form role="form">
+                                <div class="form-group">
+                                    <label>名称</label>
+                                    <input class="form-control" id="name" value="@{
+                                        if (hasData)
+                                        {@Html.Raw(picture.Title)}
+                                    }" />
+                                </div>
+                                <div class="form-group">
+                                    <label>文件信息</label>
+                                    @if (hasData)
+                                    {
+                                        <input class="form-control" id="fileShow" value="@Html.Raw(picture.Path)" />
+                                    }
+
+                                    <input class="form-control" type="file" id="fileName" />
+
+                                    <button type="button" class="btn btn-default form-control btn-danger" data-upfileName="@{
+                                        if (hasData)
+                                        {@Html.Raw(picture.Path)}
+                                    }" id="sumbitFile">
+                                        先 上 传
+                                    </button>
+                                </div>
+                                <div class="form-group">
+                                    @if (hasData)
+                                    {
+                                        <img src="/ImageFiles/@picture.Path" style="width:100%"/>
+                                    }
+                                </div>
+                                <div class="form-group">
+                                    <label>详情</label>
+                                    <input class="form-control" id="context" value="@{if (hasData) { @Html.Raw(picture.Context) }}" />
+                                </div>
+
+                                <button type="button" class="btn btn-default" id="sumbit">提  交</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /.row (nested) -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /#page-wrapper -->
+<script src="~/layer/layer.js"></script>
+<script>
+    var type = '@ViewBag.Type';
+    var id = '@ViewBag.Id';
+
+    $("#sumbitFile").click(function () {
+        layer.load(1, {
+            shade: [0.1, '#fff'] //0.1透明度的白色背景
+        });
+
+        var fd = new FormData();
+        fd.append("upfile", $(":file")[0].files[0]);
+        //var m=$("#m").val();
+        $.ajax({
+            url: "/Images/UploadImage",
+            type: "POST",
+            data: fd,
+            processData: false,
+            contentType: false
+        }).done(function (data) {
+            layer.closeAll();
+            if (data.isSuccess) {
+                layer.msg("上传成功！");
+                $("#sumbitFile").attr("data-upfileName", data.returnMessage);
+                $("#sumbitFile").attr("disabled", "disabled");
+                $("#sumbitFile").text("成功上传！");
+            } else {
+                layer.msg(data.returnMessage);
+            }
+        })
+    })
+
+    $("#sumbit").click(function () {
+        $("#sumbit").attr("disabled", true);
+
+        var name = $("#name").val();
+        var context = $("#context").val()
+        var filename = $("#sumbitFile").attr("data-upfileName");
+
+        layer.load(0, {
+            shade: [0.1, '#fff'] //0.1透明度的白色背景
+        });
+
+        $.ajax({
+            url: "/Images/ImageEnd",
+            type: "post",
+            data: { id: id, type: type, name: name, context: context, filename: filename }
+        }).done(function (data) {
+            layer.closeAll();
+            //配置一个透明的询问框
+            layer.msg(data.returnMessage, {
+                time: 0, //20s后自动关闭
+                btn: ['关闭'],
+                btn1: function () {
+                    layer.closeAll();
+                    $("#sumbit").attr("disabled", false);
+                }
+                //btn1: function () {
+                //dosome
+                //}
+            });
+        })
+    })
+
+
+    function getRadioValue(name) {
+        var result = "";
+        var obj = document.getElementsByName(name);
+        for (var i = 0; i < obj.length; i++) {
+            if (obj[i].checked) {
+                result = obj[i].value;
+                break;
+            }
+        }
+        return result;
+    }
+
+    function getCheckValue(name) {
+        var result = "";
+        var obj = document.getElementsByName(name);
+        for (var i = 0; i < obj.length; i++) {
+            if (obj[i].checked) {
+                result += (obj[i].value + ",");
+                continue;
+            }
+        }
+        return result;
+    }
+</script>
+
+
+

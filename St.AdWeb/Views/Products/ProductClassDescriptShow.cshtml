@@ -1,0 +1,58 @@
+﻿
+@{
+    Layout = null;
+    var PList = ViewBag.PciList as List<St.Domain.Entity.Product.ProductClassIntroduction>;
+}
+
+<div id="showPc">
+    <div class="col-lg-10">
+        <div class="panel-body">
+            <table width="100%" class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>名称</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                    @foreach (var item in PList)
+                    {
+                        <tr class="gradeA">
+                            <td><input type="checkbox" id="pci_@item.ID" name="pid" value="@item.ID" /></td>
+                            <td id="pci_name_@item.ID">@item.Description</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <!-- /.table-responsive -->
+            <button type="button" class="btn btn-default" id="pci_choose">选择</button>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+    $("#pci_choose").click(function () {
+        var chooseId = getCheckValue("pid");
+        
+        if (chooseId == undefined || chooseId == "") {
+            layer.msg("请选择描述信息！")
+            return;
+        }
+        var chooseIdArray = chooseId.split(",");
+
+        var old = $("#pciName").val();
+        var result = "";
+        for (var i = 0; i < chooseIdArray.length; i++) {
+            var item = chooseIdArray[i];
+            if(item==""||item==undefined){
+                continue;
+            } else {
+                result += $("#pci_name_" + item).text()+",";
+            }
+        }
+        
+        $("#pciName").val(old + ((old == "" || old == undefined) ? "" : ",") + result);
+
+        layer.closeAll();
+    })
+</script>

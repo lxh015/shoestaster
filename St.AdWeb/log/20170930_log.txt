@@ -1,0 +1,23 @@
+
+[2017-09-30 11:31:46] 日志类型：Operation，内容：
+    控制器操作权限异常：当前控制器名称：Login；当前访问路径：http://localhost:9785/Login/LogOut；异常信息内容：序列不包含任何匹配元素
+[2017-09-30 11:32:30] 日志类型：Operation，内容：
+    控制器操作权限异常：当前控制器名称：Login；当前访问路径：http://localhost:9785/Login/LogOut；异常信息内容：序列不包含任何匹配元素
+[2017-09-30 11:41:13] 日志类型：Operation，内容：
+    控制器操作权限异常：当前控制器名称：Login；当前访问路径：http://localhost:9785/Login/LogOut；异常信息内容：序列不包含任何匹配元素
+[2017-09-30 11:43:57] 日志类型：Operation，内容：
+    控制器操作权限异常：当前控制器名称：Login；当前访问路径：http://localhost:9785/Login/LogOut；异常信息内容：序列不包含任何匹配元素
+[2017-09-30 11:43:57] 日志类型：Operation，内容：
+    控制器操作权限异常：当前控制器名称：Login；当前访问路径：http://localhost:9785/Login/Code?randNum=0.645926073993697；异常信息内容：序列不包含任何匹配元素
+[2017-09-30 11:48:53] 日志类型：Operation，内容：
+    控制器操作权限异常：当前控制器名称：Login；当前访问路径：http://localhost:9785/Login/LogOut；异常信息内容：序列不包含任何匹配元素
+[2017-09-30 11:48:53] 日志类型：Error，内容：
+    退出异常，无法将类型为“System.String”的对象强制转换为类型“System.Web.HttpCookie”。
+[2017-09-30 11:48:55] 日志类型：Operation，内容：
+    控制器操作权限异常：当前控制器名称：Login；当前访问路径：http://localhost:9785/Login/Code?randNum=0.8062799460197314；异常信息内容：序列不包含任何匹配元素
+[2017-09-30 11:49:37] 日志类型：Operation，内容：
+    控制器操作权限异常：当前控制器名称：Login；当前访问路径：http://localhost:9785/Login/LogOut；异常信息内容：序列不包含任何匹配元素
+[2017-09-30 11:53:41] 日志类型：Operation，内容：
+    控制器操作权限异常：当前控制器名称：Login；当前访问路径：http://localhost:9785/Login/LogOut；异常信息内容：序列不包含任何匹配元素
+[2017-09-30 11:57:18] 日志类型：Operation，内容：
+    控制器操作权限异常：当前控制器名称：Login；当前访问路径：http://localhost:9785/Login/LogOut；异常信息内容：序列不包含任何匹配元素

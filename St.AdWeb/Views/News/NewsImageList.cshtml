@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewBag.Title = "新闻图片";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    bool hasData = ViewBag.NM == null ? false : true;
+    var pc = !hasData ? new St.Domain.Entity.News.NewsMain() : ViewBag.NM as St.Domain.Entity.News.NewsMain;
+
+}
+<link href="~/Content/layui.css" rel="stylesheet" />
+<script src="~/layer/layer.js"></script>
+
+<div id="page-wrapper" style="min-height: 899px;">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">@ViewBag.Title</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    
+    <div class="row">
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var pimageArray = getObjId("idList");
+
+        $.ajax({
+            url: "/Products/ImageGet",
+            type: "post",
+            data: { pimageArray: pimageArray }
+        }).done(function (data) {
+            if (data.Result) {
+                var url = location.host + "/";
+                for (var i = 0; i < data.Data.length; i++) {
+                    var item = data.Data[i];
+                    $("#" + item.ID).html("<img src='" + ("/ImageFiles/" + item.Image.Path) + "' style='width: 100%;'/>")
+                }
+                setData(data.Data);
+            } else {
+                layer.msg("图片信息加载失败！");
+            }
+        })
+    })
+
+    $(".edit").click(function () {
+        var piid = $(this).attr("name").replace("image_", "");
+        var iid = $(this).attr("data-data");
+        var pid = $(this).attr("data-pid");
+
+        location.href = "/Products/ProductImageEdit?pid=" + pid + "&piId=" + piid + "&isAdd=false&iid="+iid;
+    })
+
+    $(".delete").click(function () {
+        var piid = $(this).attr("name").replace("image_", "");
+        var pid = $(this).attr("data-pid");
+
+        $.ajax({
+            url: "/Products/DeleteProductImage",
+            type: "post",
+            data: { pid: pid, id:piid}
+        }).done(function (data) {
+            if (data.isSuccess) {
+                $("#remove_" + piid).remove();
+            }
+            layer.msg(data.returnMessage);
+        })
+    })
+
+    function setData(data) {
+        for (var i = 0; i < data.length; i++) {
+            var objList = document.getElementsByName("image_" + data[i].ID);
+            for (var j = 0; j < objList.length; j++) {
+                var obj = objList[j];
+                obj.attributes["data-data"].nodeValue = data[i].Image.ID;
+            }
+        }
+    }
+
+    function getObjId(name) {
+        var result = "";
+        var objArray = document.getElementsByName(name);
+        for (var i = 0; i < objArray.length; i++) {
+            result += objArray[i].attributes["data-data"].nodeValue + ",";
+        }
+        return result;
+    }
+</script>

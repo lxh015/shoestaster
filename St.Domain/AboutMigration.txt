@@ -1,0 +1,65 @@
+﻿
+在程序包管理控制台执行如下命令: (注: 程序包管理控制台位于VS2012菜单 工具 -> 库程序包管理器 -> 程序包管理控制台)
+
+安装
+Install-Package EntityFramework -Version 6.1.3
+Install-Package EntityFramework.Extended -Version 6.1.0.168
+Install-Package Microsoft.AspNet.Mvc -Version 5.2.3
+Install-Package Unity -Version 3.5.1404.0
+卸载
+Uninstall-Package
+
+【数据迁移】
+
+生成 Configuration.cs
+Enable-Migrations
+
+
+生成更新文件
+Add-Migration fileName 
+
+
+执行数据库更新
+Update-Database -Verbose 
+
+执行回滚
+Update-Database –TargetMigration:fileName
+
+视图
+public override void Up()
+        {
+            this.CreateView("dbo.V_TestView",
+                      @"SELECT   dbo.D_TestData.ID, dbo.D_TestData.ShipData_ID, dbo.D_TestData.TestName, 
+                dbo.D_SHIPDATA.Code AS ShipData_Code, dbo.D_SHIPDATA.NameCN AS ShipData_NameCN, 
+                dbo.D_SHIPDATA.NameEN AS ShipData_NameEN, dbo.D_TestData.CreateTime, 
+                dbo.D_TestData.LastModifiedTime
+                FROM      dbo.D_SHIPDATA INNER JOIN
+                dbo.D_TestData ON dbo.D_SHIPDATA.ID = dbo.D_TestData.ShipData_ID");
+        }
+        
+        public override void Down()
+        {
+            this.RemoveView("dbo.V_TestView");
+        }
+
+多表事务
+            using (var db = new DefaultDbContext())
+            {
+                using (var trans = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        
+                        db.SaveChanges();
+                        trans.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        trans.Rollback();
+                    }
+                }
+            } 
+
+
+
+

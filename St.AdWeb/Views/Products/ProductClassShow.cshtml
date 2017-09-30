@@ -1,0 +1,54 @@
+﻿
+@{
+    Layout = null;
+    var PList = ViewBag.PcList as List<St.Domain.Entity.Product.ProductClass>;
+}
+
+<div id="showPc">
+    <div class="col-lg-10">
+        <div class="panel-body">
+            <table width="100%" class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>名称</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                    @foreach (var item in PList)
+                    {
+                        <tr class="gradeA">
+                            <td><input type="radio" id="pc_@item.ID" name="id" value="@item.ID" /></td>
+                            <td id="pc_name_@item.ID">@item.Name</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <!-- /.table-responsive -->
+            <button type="button" class="btn btn-default" id="pc_choose">选择</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#pc_choose").click(function () {
+        var chooseId = getRadioValue("id");
+        if (chooseId == undefined || chooseId == "") {
+            layer.msg("请选择类别！")
+            return;
+        }
+       
+        var name = $("#pc_name_" + chooseId).text();
+
+        $("#pcId").val(chooseId);
+        $("#pcName").val(name);
+
+        layer.closeAll();
+
+        try {
+            showIntroduction();
+        } catch (e) {
+
+        }
+    })
+</script>

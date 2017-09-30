@@ -1,0 +1,70 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>用户登录</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/metisMenu.min.css" rel="stylesheet" />
+    <link href="~/Content/sb-admin-2.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">欢迎登陆 XXX 后台系统</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form role="form" id="goLg">
+                            <fieldset>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="账号" id="username" type="text" autofocus>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="密码" id="password" type="password" value="">
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control col-md-4" placeholder="验证码" id="code" type="text" value="" style="width:50%">
+                                    <img id="vcode"/>
+                                </div>
+                                @*<div class="checkbox">
+                                        <label>
+                                            <input name="remember" type="checkbox" value="Remember Me">Remember Me
+                                        </label>
+                                    </div>*@
+                                <!-- Change this to a button or input when using this as a form -->
+                                <button type="button" onclick="goLogin()" class="btn btn-lg btn-success btn-block">登 录</button>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/metisMenu.min.js"></script>
+    <script src="~/Scripts/sb-admin-2.js"></script>
+    <script src="~/Scripts/login.js"></script>
+    <script src="~/layer/layer.js"></script>
+    <script>
+       
+        $(document).ready(setVCode());
+        $("#vcode").click(function () { setVCode(); });
+        function setVCode(){
+            var img_vcode_url = "/Login/Code";
+            var rand = Math.random();
+            $("#vcode").attr("src", img_vcode_url + "?randNum=" + rand);
+            $("#vcode").attr("data-data", rand);
+        }
+    </script>
+</body>
+</html>

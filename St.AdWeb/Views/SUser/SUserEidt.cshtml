@@ -1,0 +1,190 @@
+﻿
+@{
+    ViewBag.Title = "管理员添加";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    bool hasData = ViewBag.SU != null;
+    var suser = hasData ? ViewBag.SU as St.Domain.Entity.SuperUser.SUser : null;
+}
+
+<link href="~/Content/default/layer.css" rel="stylesheet" />
+<link href="~/Content/layui.css" rel="stylesheet" />
+<script src="~/Scripts/layui.js"></script>
+
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header" style="font-size:36px!important">@ViewBag.Title</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    添加管理员
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <form role="form">
+                                <div class="form-group">
+                                    <label>用户名</label>
+                                    <input class="form-control" id="name" value="@{
+                                        if (hasData)
+                                        {@Html.Raw(suser.Name)}
+                                    }" />
+                                </div>
+                                <div class="form-group">
+                                    <label>昵称</label>
+                                    <input class="form-control" id="nickname" value="@{
+                                        if (hasData)
+                                        {@Html.Raw(suser.NickName)}
+                                    }" />
+                                </div>
+                                <div class="form-group">
+                                    <label>密码</label>
+                                    <input class="form-control" id="password" value="@{
+                                        if (hasData)
+                                        {@Html.Raw(suser.PassWord)}
+                                    }" />
+                                </div>
+                                <div class="form-group">
+                                    <label>是否启用</label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="isuse" value="1"
+                                               @{if (hasData && suser.isUse) { @Html.Raw("checked"); } }>正在使用
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="isuse" value="0"
+                                               @{if (hasData && !suser.isUse) { @Html.Raw("checked"); } }>停止使用
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label>用户权限</label>
+                                    <select class="form-control" id="level">
+                                        <option value="0">超级管理员</option>
+                                        <option value="1">管理员</option>
+                                        <option value="2">区域管理</option>
+                                        <option value="4">普通</option>
+                                        <option value="16">游客</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>审核信息</label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="audit" value="0"
+                                               @{if (hasData && suser.Stata == St.Domain.Entity.AuditState.待审核) { @Html.Raw("checked")                       ; } }>待审核
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="audit" value="1"
+                                               @{if (hasData && suser.Stata == St.Domain.Entity.AuditState.审核成功) { @Html.Raw("checked")                       ; } }>审核成功
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="audit" value="2"
+                                               @{if (hasData && suser.Stata == St.Domain.Entity.AuditState.审核失败) { @Html.Raw("checked")                       ; } }>审核失败
+                                    </label>
+                                </div>
+                                
+                                <button type="button" class="btn btn-default" id="sumbit">提  交</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /.row (nested) -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /#page-wrapper -->
+<script>
+    var type = '@ViewBag.Type';
+    var id = '@ViewBag.Id';
+
+    var context = "";
+    var inputName = "";
+
+    $("#sumbit").click(function () {
+        $("#sumbit").attr("disabled", true);
+
+        var name = $("#name").val();
+        var audit = getRadioValue("audit");
+        var nickname = $("#nickname").val();
+        var password = $("#password").val();
+        var level = $("#level").val();
+        var isuse = getRadioValue("isuse");
+
+        layer.load(0, {
+            shade: [0.1, '#fff'] //0.1透明度的白色背景
+        });
+
+        $.ajax({
+            url: "/SUser/SUserEnd",
+            type: "post",
+            data: { id: id, type: type, name: name, nickname: nickname, password: password, level: level, audit: audit, isuse: isuse }
+        }).done(function (data) {
+            layer.closeAll();
+            //配置一个透明的询问框
+            layer.msg(data.returnMessage, {
+                time: 0, //20s后自动关闭
+                btn: ['关闭'],
+                btn1: function () {
+                    layer.closeAll();
+                    $("#sumbit").attr("disabled", false);
+                }
+                //btn1: function () {
+                //dosome
+                //}
+            });
+        })
+    })
+
+    function getRadioValue(name) {
+        var result = "";
+        var obj = document.getElementsByName(name);
+        for (var i = 0; i < obj.length; i++) {
+            if (obj[i].checked) {
+                result = obj[i].value;
+                break;
+            }
+        }
+        return result;
+    }
+
+    function getCheckValue(name) {
+        var result = "";
+        var obj = document.getElementsByName(name);
+        for (var i = 0; i < obj.length; i++) {
+            if (obj[i].checked) {
+                result += (obj[i].value + ",");
+                continue;
+            }
+        }
+        return result;
+    }
+</script>
+<script>
+
+    layui.use('layedit', function () {
+        var layedit = layui.layedit
+        , $ = layui.jquery;
+
+        //构建一个默认的编辑器
+        var conts = layedit.build('context');
+
+        //编辑器外部操作
+        var active = {
+            getintroduction: function () {
+                var cont = layedit.getContent(conts); //获取编辑器纯文本内容
+                return cont;
+            }
+        };
+        $("#sumbit").mouseover(function () {
+            context = active['getintroduction'].call(this);
+        })
+    });
+</script>
