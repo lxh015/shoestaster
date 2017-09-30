@@ -49,6 +49,34 @@ namespace St.AdWeb.Controllers
             return Json(Data, JsonRequestBehavior.DenyGet);
         }
 
+        public ActionResult ProductQueryList(string search, int page = 0)
+        {
+            BaseListResult<Products> Data = new BaseListResult<Products>();
+            try
+            {
+                List<Products> dataList = new List<Products>();
+                QueryExpression<Products> query = new QueryExpression<Products>(p => p.ID != 0);
+                double money = 0d;
+                bool result = double.TryParse(search, out money);
+
+                if (result)
+                    query.QueryExpressions.And(p => p.Name.Contains(search) || p.ClassIntroduction.Contains(search));
+                else
+                    query.QueryExpressions.And(p => p.Name.Contains(search) || p.ClassIntroduction.Contains(search));
+                
+                dataList = ProductService.QueryForPage(page, query);
+                if (dataList.Count == 0)
+                    Data.SetError();
+                else
+                    Data.SetData(dataList);
+            }
+            catch
+            {
+                Data.SetError();
+            }
+            return Json(Data, JsonRequestBehavior.DenyGet);
+        }
+
         #region 编辑和添加
         public ActionResult ProductEidt(bool isAdd = true, int id = 0)
         {
@@ -300,11 +328,11 @@ namespace St.AdWeb.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> DeleteProductImage(int pid,int id)
+        public async Task<ActionResult> DeleteProductImage(int pid, int id)
         {
             try
             {
-                ProductImageService.DeleteImage(pid,id);
+                ProductImageService.DeleteImage(pid, id);
                 _baseResult.SetResult(true, "操作成功！");
             }
             catch
@@ -347,7 +375,7 @@ namespace St.AdWeb.Controllers
             return Json(result, JsonRequestBehavior.DenyGet);
         }
         #endregion
-        
+
         #region 类别
         public ActionResult ProductClassIndex()
         {

@@ -34,7 +34,6 @@ function goLogin() {
         type: "post",
         data: { username: info[0], password: info[1], vcode: info[2], vctime: info[3], kd: info[4], cd: info[5] }
     }).done(function (data) {
-        console.log(data);
         if (data.islogin) {
             window.location.href = "/";
         } else {

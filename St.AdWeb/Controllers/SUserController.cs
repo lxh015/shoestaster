@@ -4,6 +4,7 @@ using St.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -178,34 +179,50 @@ namespace St.AdWeb.Controllers
         {
             try
             {
-                string productLevel = PostHttp("productLevel");
-                string newsLevel = PostHttp("newsLevel");
-                string adsLevel = PostHttp("adsLevel");
-                string imageLevel = PostHttp("imageLevel");
-                string settingLevel = PostHttp("settingLevel");
+                dynamic webset = HttpContext.Cache.Get(webSetPath);
+                if (webset == null)
+                    webset = GetWebSet();
 
-                if (string.IsNullOrEmpty(productLevel) || string.IsNullOrEmpty(newsLevel) ||
-                    string.IsNullOrEmpty(adsLevel) || string.IsNullOrEmpty(imageLevel) ||
-                    string.IsNullOrEmpty(settingLevel))
+                Type wsType = webset.GetType();
+                var wsProperties = wsType.GetProperties();
+                var postArray = HttpContext.Request.Params.AllKeys;
+
+                int mathLength = 0;
+                wsProperties.ToList().ForEach(p =>
+                {
+                    if (postArray.Where(f => f.ToLower() == p.Name.ToLower()).Count() > 0)
+                        mathLength += 1;
+                });
+
+                if (mathLength != wsProperties.Length)
                 {
                     _baseResult.SetResult(false, "信息不完整！");
                     goto Ret;
                 }
 
-                dynamic webset = HttpContext.Cache.Get(webSetPath);
-
-                if (webset == null)
+                foreach (var item in wsProperties)
                 {
-
+                    foreach (var post in postArray)
+                    {
+                        if (item.Name.ToLower() == post.ToLower())
+                        {
+                            try
+                            {
+                                string postVal = HttpContext.Request.Params[post];
+                                var enumVal = (St.Domain.Entity.LevelInfo)Convert.ToInt32(Enum.Parse(typeof(St.Domain.Entity.LevelInfo), postVal));
+                                item.SetValue(webset, enumVal);
+                            }
+                            catch (Exception ex)
+                            {
+                                WriteLog(Code.LogHandle.LogEnum.LogType.operation, $"设置WebSet异常，当参数:{post}，{ex.Message}");
+                            }
+                            break;
+                        }
+                    }
                 }
 
-                webset.ProductsLevel = (Domain.Entity.LevelInfo)Convert.ToInt32(productLevel);
-                webset.NewsLevel = (Domain.Entity.LevelInfo)Convert.ToInt32(newsLevel);
-                webset.AdsLevel = (Domain.Entity.LevelInfo)Convert.ToInt32(adsLevel);
-                webset.ImagesLevel = (Domain.Entity.LevelInfo)Convert.ToInt32(imageLevel);
-                webset.SettingLevel = (Domain.Entity.LevelInfo)Convert.ToInt32(settingLevel);
-
                 HttpContext.Cache[webSetPath] = webset;
+                WriteWebSet();
                 _baseResult.SetResult(true, "操作成功！");
             }
             catch
@@ -216,6 +233,33 @@ namespace St.AdWeb.Controllers
             Ret:
             await RSetBaseResult();
             return Json(_baseResult, JsonRequestBehavior.DenyGet);
+        }
+
+        private void WriteWebSet()
+        {
+            Task taskWriteNewWebSet = new Task(() =>
+            {
+                object webset = HttpContext.Cache[webSetPath];
+                var propertis = webset.GetType().GetProperties();
+                StringBuilder sb = new StringBuilder();
+                foreach (var item in propertis)
+                {
+                    var attributeVal = item.CustomAttributes.First().ConstructorArguments[0].Value;
+                    var properName = item.Name;
+                    var properVal = Convert.ToInt32(item.GetValue(webset));
+                    sb.Append($"{attributeVal}:{properName}:{properVal},");
+                }
+
+                string basePath = GetWebSetPath();
+
+                System.IO.FileStream fs = new System.IO.FileStream(basePath, System.IO.FileMode.Create);
+                var bytes = Encoding.Default.GetBytes(sb.ToString());
+                fs.Write(bytes, 0, bytes.Length);
+                fs.Flush();
+                fs.Dispose();
+                fs.Close();
+            });
+            taskWriteNewWebSet.Start();
         }
     }
 }

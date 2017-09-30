@@ -31,7 +31,8 @@
                     </div>
                     <div class="col-sm-4">
                         <div id="example_filter" class="dataTables_filter">
-                            <label>搜索:<input type="search" class="form-control input-sm" placeholder="" aria-controls="example"></label>
+                            <label>搜索:<input id="searchInfo" type="search" class="form-control input-sm" placeholder="" aria-controls="example"></label>
+                            <button class="btn btn-default" type="button" onclick="">查找</button>
                         </div>
                     </div>
                 </div>
@@ -90,39 +91,63 @@
 <script>
     var htmlCopy = "<tr class='gradeA'><td>[id]</td><td>[name]</td><td>[minprice]-[maxprice]</td><td class='center'>[isshow]</td><td class='center'>[stata]</td><td ><a class='btn btn-default buttons-html5 btn-warning' href='/Products/ProductEidt?isAdd=false&id=[id]'><span>编辑</span></a><a class='btn btn-default buttons-html5 btn-danger' href='javascript:Jump.GoDelete([id])'><span>删除</span></a><a class='btn btn-default buttons-html5' href='/Products/ProductsImageList?pid=[id]'><span>产品图片展示</span></a></td></tr>";
 
-        GetData();
-        function GetData() {
-            layer.load(0, {
-                shade: [0.1, '#fff']
-            });
+    GetData();
+    function GetData(jumpUrl) {
+        layer.load(0, {
+            shade: [0.1, '#fff']
+        });
 
-            Jump.nowPage = 0;
-            Jump.Url = "/Products/ProductList";
-            Jump.DeleteUrl = "/Products/DeleteProduct";
-            Jump.ReplaceArray = ["id", "name", "minprice", "maxprice", "isshow", "stata", "id", "id", "id"];
+        Jump.nowPage = 0;
+        Jump.Url = (jumUrl == "" || jumpUrl == null || jumpUrl == undefined) ? "/Products/ProductList" : jumpUrl;
+        Jump.DeleteUrl = "/Products/DeleteProduct";
+        Jump.ReplaceArray = ["id", "name", "minprice", "maxprice", "isshow", "stata", "id", "id", "id"];
 
-            $.ajax({
-                url: Jump.Url,
-                type: "post",
-            }).done(function (data) {
-               Jump.ShowHtml(data);
-            })
+        $.ajax({
+            url: Jump.Url,
+            type: "post",
+        }).done(function (data) {
+            Jump.ShowHtml(data);
+        })
+    }
+
+    function SetHtml(data) {
+
+    }
+
+    var hasData = true;
+    Jump.hasData = hasData;
+    $("#jumpA").click(function () {
+        Jump.Jump($("#jumpInput").val());
+    });
+    $("#nextPage").click(function () {
+        Jump.Next();
+    });
+    $("#previousPage").click(function () {
+        Jump.Previous();
+    });
+
+    function searchGo() {
+        layer.load(0, {
+            shade: [0.1, '#fff']
+        });
+
+        var serachInfo = $("#searchInfo").val();
+        if (serachInfo == undefined || serachInfo == "" || serachInfo == null) {
+            searchError("查找条件错误");
+            return;
         }
-
-        function SetHtml(data) {
+        else {
 
         }
+    }
 
-        var hasData = true;
-        Jump.hasData = hasData;
-        $("#jumpA").click(function () {
-            Jump.Jump($("#jumpInput").val());
+    function searchError(message) {
+        layer.msg(message, {
+            time: 0,
+            btn: ['关闭'],
+            btn1: function () {
+                layer.closeAll();
+            }
         });
-        $("#nextPage").click(function () {
-            Jump.Next();
-        });
-        $("#previousPage").click(function () {
-            Jump.Previous();
-        });
+    }
 </script>
-

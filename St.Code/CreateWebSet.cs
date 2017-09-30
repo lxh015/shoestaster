@@ -25,11 +25,6 @@ namespace St.Code
             {
                 SetPropertyValue(obj,item);
             }
-
-            var pros = obj.GetType().GetProperties();
-
-
-
             return obj;
         }
 

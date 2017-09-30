@@ -31,7 +31,7 @@ namespace St.Code
         /// WebSet名称
         /// </summary>
         public readonly string webSetPath = "WebSet";
-        
+
         #region 权限相关
         /// <summary>
         /// 检查用户授权
@@ -96,10 +96,33 @@ namespace St.Code
                     }
                 }
 
-                var pro = _webSet.GetType().GetProperties();
-
                 httpContext.Cache.Add(webSetPath, _webSet, null, DateTime.Now.AddDays(1), System.Web.Caching.Cache.NoSlidingExpiration, System.Web.Caching.CacheItemPriority.Normal, null);
             }
+        }
+
+
+        public string GetWebSetPath()
+        {
+            string basePath = AppDomain.CurrentDomain.BaseDirectory;
+            basePath = string.Format("{0}{1}", basePath, "BaseFile\\Level.txt");
+            return basePath;
+        }
+
+        protected object GetWebSet()
+        {
+            string basePath = GetWebSetPath();
+            object _webSet = new object();
+            if (!System.IO.File.Exists(basePath))
+                return _webSet;
+            else
+            {
+                using (System.IO.StreamReader sr = new System.IO.StreamReader(basePath, Encoding.Default))
+                {
+                    string context = sr.ReadToEnd();
+                    _webSet = CreateWebSet.GetWebSet(context);
+                }
+            }
+            return _webSet;
         }
 
         /// <summary>

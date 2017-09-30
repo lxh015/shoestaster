@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     object webSet = ViewBag.WebSet;
     var levelTypeInfo = typeof(St.Domain.Entity.LevelInfo);
+    string nameStr = string.Empty;
 }
 
 <div id="page-wrapper">
@@ -41,9 +42,9 @@
                                         foreach (var lv in levelTypeInfo.GetEnumValues())
                                         {
                                             <label class="radio-inline">
-                                                <input type="radio" name="@item.Name" value="0" @{if ( itemValue.ToString() == lv.ToString()) { @Html.Raw("checked"); } }>@lv.ToString()
+                                                <input type="radio" name="@item.Name" value="@lv.ToString()" @{if (itemValue.ToString() == lv.ToString()) { @Html.Raw("checked")    ; } }>@lv.ToString()
                                             </label>
-                                        }
+    }
                                     }
                                 </div>
     }
@@ -63,7 +64,7 @@
                         </div>
                     </div>
                     <!-- /.list-group -->
-                    <a href="javascript:void(0)" onclick="goSaveWebSet()" class="btn btn-default btn-block">保  存</a>
+                    <a href="javascript:void(0)" onclick="goSaveWebSet(this)" class="btn btn-default btn-block">保  存</a>
                 </div>
                 <!-- /.panel-body -->
             </div>
@@ -72,21 +73,30 @@
         </div>
     </div>
 </div>
+<script src="~/layer/layer.js"></script>
 <script>
-    function goSaveWebSet() {
-        var productLevel = getRadioValue("ProductsLevel");
+    function goSaveWebSet(obj) {
+        $(obj).attr("disabled", true);
+        var productsLevel = getRadioValue("ProductsLevel");
         var newsLevel = getRadioValue("NewsLevel");
         var adsLevel = getRadioValue("AdsLevel");
-        var imageLevel = getRadioValue("ImagesLevel");
-        var settingLevel = getRadioValue("SettingLevel");
+        var imagesLevel = getRadioValue("ImagesLevel");
+        var suserLevel = getRadioValue("SUserLevel");
 
         $.ajax({
             url: "/SUser/SaveWebSet",
             type: "post",
-            data: { productLevel: productLevel, newsLevel: newsLevel, adsLevel: adsLevel, imageLevel: imageLevel, settingLevel: settingLevel }
+            data: { productsLevel: productsLevel, newsLevel: newsLevel, adsLevel: adsLevel, imagesLevel: imagesLevel, suserLevel: suserLevel }
         }).done(function (data) {
-            alert(data.returnMessage);
-            location.reload();
+            layer.msg(data.returnMessage, {
+                time: 5000,
+                btn: ["关闭"],
+                btn1: function () {
+                    layer.closeAll();
+                    $("#sumbit").attr("disabled", false);
+                    window.setTimeout(location.reload(), 1000);
+                }
+            });
         })
     }
 
