@@ -3,8 +3,12 @@ $ = window.$ || {},
 $.keyD = 0;
 $.clD = 0;
 $.TEA = function () {
-    kd = function () {
-        $.keyD++;
+    kd = function (event) {
+        if (event.keyCode != 13) {
+            $.keyD++;
+        } else {
+            goLogin();
+        }
     },
     cd = function () {
         $.clD++;

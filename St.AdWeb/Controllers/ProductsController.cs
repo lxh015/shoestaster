@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -27,43 +28,48 @@ namespace St.AdWeb.Controllers
             return View();
         }
 
+        //[HttpPost]
+        //public ActionResult ProductList(int page = 0)
+        //{
+        //    BaseListResult<Products> Data = new BaseListResult<Products>();
+        //    try
+        //    {
+        //        List<Products> dataList = new List<Products>();
+        //        Code.QueryExpression<Products> query = new QueryExpression<Products>(p => p.ID != 0);
+
+        //        dataList = ProductService.QueryForPage(page, query);
+        //        if (dataList.Count == 0)
+        //            Data.SetError();
+        //        else
+        //            Data.SetData(dataList);
+        //    }
+        //    catch
+        //    {
+        //        Data.SetError();
+        //    }
+        //    return Json(Data, JsonRequestBehavior.DenyGet);
+        //}
+
         [HttpPost]
-        public ActionResult ProductList(int page = 0)
+        public ActionResult ProductQueryList(string search = "", int page = 0)
         {
             BaseListResult<Products> Data = new BaseListResult<Products>();
             try
             {
                 List<Products> dataList = new List<Products>();
-                Code.QueryExpression<Products> query = new QueryExpression<Products>(p => p.ID != 0);
+                QueryExpression<Products> query = new QueryExpression<Products>();
 
-                dataList = ProductService.QueryForPage(page, query);
-                if (dataList.Count == 0)
-                    Data.SetError();
-                else
-                    Data.SetData(dataList);
-            }
-            catch
-            {
-                Data.SetError();
-            }
-            return Json(Data, JsonRequestBehavior.DenyGet);
-        }
+                if (!string.IsNullOrEmpty(search))
+                {
+                    double money = 0d;
+                    bool result = double.TryParse(search, out money);
 
-        public ActionResult ProductQueryList(string search, int page = 0)
-        {
-            BaseListResult<Products> Data = new BaseListResult<Products>();
-            try
-            {
-                List<Products> dataList = new List<Products>();
-                QueryExpression<Products> query = new QueryExpression<Products>(p => p.ID != 0);
-                double money = 0d;
-                bool result = double.TryParse(search, out money);
+                    if (result)
+                        query.AddExperssion(new ExpressionSpecification<Products>(p => p.minPrice <= money && p.maxPrice >= money));
+                    else
+                        query.AddExperssion(new ExpressionSpecification<Products>(p => p.Name.Contains(search) || p.ClassIntroduction.Contains(search)));
+                }
 
-                if (result)
-                    query.QueryExpressions.And(p => p.Name.Contains(search) || p.ClassIntroduction.Contains(search));
-                else
-                    query.QueryExpressions.And(p => p.Name.Contains(search) || p.ClassIntroduction.Contains(search));
-                
                 dataList = ProductService.QueryForPage(page, query);
                 if (dataList.Count == 0)
                     Data.SetError();
@@ -187,6 +193,36 @@ namespace St.AdWeb.Controllers
             ProductService.Add(pc);
             return true;
         }
+
+
+        #region MyRegion
+        object lockObj = new object();
+        public void AddPForTest()
+        {
+            Console.WriteLine($"开始 当前时间为{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
+            for (int i = 0; i < 10000; i++)
+            {
+                lock (lockObj)
+                {
+                    Products pc = new Products();
+
+                    pc.ClassIntroduction =ComFunc.GetEnglistCodeString(10);
+                    pc.Context = ComFunc.GetEnglistCodeString(10);
+                    pc.Introduction = ComFunc.GetEnglistCodeString(10);
+                    pc.isShow = ComFunc.random.Next(1, 3) % 2 == 0 ? true : false;
+                    pc.maxPrice = ComFunc.random.Next(1, 30000);
+                    pc.minPrice = pc.maxPrice - ComFunc.random.Next(1, 111);
+                    pc.Name = ComFunc.GetEnglistCodeString(4);
+                    pc.productClass = ProductClassService.GetByID(1);
+                    pc.Stata = (Domain.Entity.AuditState)Convert.ToInt32(1);
+
+                    ProductService.Add(pc);
+                    Console.WriteLine($"第{i}次 当前时间{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
+                }
+            }
+            Console.WriteLine($"结束 当前时间为{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
+        } 
+        #endregion
 
         private bool EidtP(int id, string name, string isshow, string audit, string minprice,
             string maxprice, string pcId, string introduction, string context, string pciName, string imageArray)
@@ -389,7 +425,7 @@ namespace St.AdWeb.Controllers
             try
             {
                 List<ProductClass> dataList = new List<ProductClass>();
-                Code.QueryExpression<ProductClass> query = new QueryExpression<ProductClass>(p => p.ID != 0);
+                Code.QueryExpression<ProductClass> query = new QueryExpression<ProductClass>();
 
                 dataList = ProductClassService.QueryForPage(page, query);
                 if (dataList.Count == 0)
@@ -496,7 +532,7 @@ namespace St.AdWeb.Controllers
 
         public PartialViewResult ProductClassShow()
         {
-            ViewBag.PcList = ProductClassService.GetByQuery(new QueryExpression<ProductClass>(p => p.ID != 0)).ToList();
+            ViewBag.PcList = ProductClassService.GetByQuery(new QueryExpression<ProductClass>()).ToList();
 
             return PartialView();
         }
@@ -531,7 +567,7 @@ namespace St.AdWeb.Controllers
             try
             {
                 List<ProductClassIntroduction> dataList = new List<ProductClassIntroduction>();
-                Code.QueryExpression<ProductClassIntroduction> query = new QueryExpression<ProductClassIntroduction>(p => p.ID != 0);
+                Code.QueryExpression<ProductClassIntroduction> query = new QueryExpression<ProductClassIntroduction>();
 
                 dataList = ProductClassIntroductionService.QueryForPage(page, query);
                 if (dataList.Count == 0)
@@ -653,9 +689,9 @@ namespace St.AdWeb.Controllers
 
         public PartialViewResult ProductClassDescriptShow(int classID)
         {
-            ViewBag.PciList = ProductClassIntroductionService.GetByList(
-                new QueryExpression<ProductClassIntroduction>(p => p.ID != 0 && p.productClass.ID == classID),
-                "productClass").ToList();
+            QueryExpression<ProductClassIntroduction> queryShow = new QueryExpression<ProductClassIntroduction>();
+            queryShow.AddExperssion(new ExpressionSpecification<ProductClassIntroduction>(p => p.productClass.ID == classID));
+            ViewBag.PciList = ProductClassIntroductionService.GetByList(queryShow, "productClass").ToList();
 
             return PartialView();
         }

@@ -15,6 +15,7 @@ namespace St.AdWeb.Controllers
         private readonly string CodeSessionName = "codeVale";
         private readonly string CodeSessionLastTime = "codeLastTime";
         private ISUserInterface UserService = Ioc.GetService<ISUserInterface>();
+        
         /// <summary>
         /// 最大登录错误次数
         /// </summary>
@@ -28,7 +29,7 @@ namespace St.AdWeb.Controllers
         public ActionResult Index()
         {
             var UserService = Ioc.GetService<ISUserInterface>();
-            var query = new QueryExpression<SUser>(p => p.ID != 0);
+            var query = new QueryExpression<SUser>();
 
             var count = UserService.GetByQuery(query);
 
@@ -115,6 +116,43 @@ namespace St.AdWeb.Controllers
             return View("Index");
         }
 
+
+        public ActionResult RegisterSuperUser(int number = 0)
+        {
+            ViewBag.UserList = null;
+
+            if (number < 0)
+                return View();
+
+            List<SUser> registerUserList = new List<SUser>();
+
+            try
+            {
+                for (int i = 0; i < number; i++)
+                {
+                    SUser su = new SUser();
+
+                    su.Name = ComFunc.GetEnglistCodeString(6);
+                    su.NickName = su.Name;
+                    su.isUse = true;
+                    su.Level = (Domain.Entity.LevelInfo)2;
+                    su.PassWord = "123456";
+                    su.Stata = (Domain.Entity.AuditState)1;
+
+                    UserService.Add(su);
+                    registerUserList.Add(su);
+                }
+            }
+            catch (Exception ex)
+            {
+                WriteLog(St.Code.LogHandle.LogEnum.LogType.operation, $"批量添加用户发生异常，{ex.Message}");
+            }
+            ViewBag.UserList = registerUserList;
+
+            return View();
+        }
+
+
         private bool CheckVCode(HttpContextBase httpContext)
         {
             var vCode = httpContext.Request.Params["vcode"];
@@ -157,7 +195,7 @@ namespace St.AdWeb.Controllers
             successCookie.Expires = DateTime.Now.AddDays(1);
             successCookie.Shareable = false;
             HttpContext.Response.Cookies.Add(successCookie);
-            HttpContext.Response.Cookies.Add(new HttpCookie("LoginUser", userName) { Expires = DateTime.Now.AddDays(1),Shareable=false });
+            HttpContext.Response.Cookies.Add(new HttpCookie("LoginUser", userName) { Expires = DateTime.Now.AddDays(1), Shareable = false });
         }
 
         /// <summary>

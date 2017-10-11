@@ -29,7 +29,7 @@ namespace St.AdWeb.Controllers
             try
             {
                 List<NewsMain> dataList = new List<NewsMain>();
-                Code.QueryExpression<NewsMain> query = new QueryExpression<NewsMain>(p => p.ID != 0);
+                Code.QueryExpression<NewsMain> query = new QueryExpression<NewsMain>();
 
                 dataList = NewsMainService.QueryForPage(page, query);
                 if (dataList.Count == 0)

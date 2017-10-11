@@ -29,7 +29,7 @@ namespace St.AdWeb.Controllers
             try
             {
                 List<SUser> dataList = new List<SUser>();
-                Code.QueryExpression<SUser> query = new QueryExpression<SUser>(p => p.ID != 0);
+                Code.QueryExpression<SUser> query = new QueryExpression<SUser>();
 
                 dataList = SUserService.QueryForPage(page, query);
                 if (dataList.Count == 0)

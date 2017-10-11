@@ -45,17 +45,17 @@ namespace St.Service.Implementations
             }
         }
 
-        public List<Ads> QueryForPage(int Page, QueryExpression<Ads> Query, int Count = 15)
+        public List<Ads> QueryForPage(int Page, QueryExpression<Ads> Query)
         {
             using (var db = this.NewDB())
             {
                 var pageQuery = db.Set<Ads>().AsNoTracking().AsQueryable();
-                pageQuery = pageQuery.Where(Query.QueryExpressions);
-                int skip = Page * Count;
+                pageQuery = pageQuery.Where(Query.QueryExpressions.GetExpression());
+                int skip = Page * Query.PageCountNumber;
                 if (skip > pageQuery.Count())
                     return new List<Ads>();
 
-                return pageQuery.OrderBy(p => p.ID).Skip(skip).Take(Count).ToList();
+                return pageQuery.OrderBy(p => p.ID).Skip(skip).Take(Query.PageCountNumber).ToList();
             }
         }
     }

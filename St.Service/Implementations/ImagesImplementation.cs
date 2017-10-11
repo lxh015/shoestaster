@@ -15,7 +15,7 @@ namespace St.Service.Implementations
             using (var db = this.NewDB())
             {
                 var pageQuery = db.Set<Images>().AsNoTracking().AsQueryable();
-                pageQuery = pageQuery.Where(Query.QueryExpressions);
+                pageQuery = pageQuery.Where(Query.QueryExpressions.GetExpression());
                 int skip = Page * Count;
                 if (skip > pageQuery.Count())
                     return new List<Images>();
@@ -29,7 +29,7 @@ namespace St.Service.Implementations
             using (var db = this.NewDB())
             {
                 var pageQuery = db.Set<Images>().AsNoTracking().AsQueryable();
-                return pageQuery.Where(Query.QueryExpressions).ToList();
+                return pageQuery.Where(Query.QueryExpressions.GetExpression()).ToList();
             }
         }
     }

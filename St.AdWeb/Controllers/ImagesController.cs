@@ -72,7 +72,7 @@ namespace St.AdWeb.Controllers
             try
             {
                 List<Images> dataList = new List<Images>();
-                Code.QueryExpression<Images> query = new QueryExpression<Images>(p => p.ID != 0);
+                Code.QueryExpression<Images> query = new QueryExpression<Images>();
 
                 dataList = ImageService.QueryForPage(page, query);
                 if (dataList.Count == 0)
@@ -200,7 +200,7 @@ namespace St.AdWeb.Controllers
 
         public PartialViewResult ImageShow(bool isNeedShowImage = false)
         {
-            ViewBag.allImage = ImageService.GetByQuery(new QueryExpression<Images>(p => p.ID != 0)).ToList();
+            ViewBag.allImage = ImageService.GetByQuery(new QueryExpression<Images>()).ToList();
             ViewBag.isNeedShowImage = isNeedShowImage;
             return PartialView();
         }

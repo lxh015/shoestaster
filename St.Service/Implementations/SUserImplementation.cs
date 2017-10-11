@@ -10,17 +10,17 @@ namespace St.Service.Implementations
 {
     public class SUserImplementation : ServiceBase<SUser>, ISUserInterface
     {
-        public List<SUser> QueryForPage(int Page, QueryExpression<SUser> Query, int Count = 15)
+        public List<SUser> QueryForPage(int Page, QueryExpression<SUser> Query)
         {
             using (var db = base.NewDB())
             {
                 var pageQuery = db.Set<SUser>().AsNoTracking().AsQueryable();
-                pageQuery = pageQuery.Where(Query.QueryExpressions);
-                int skip = Page * Count;
+                pageQuery = pageQuery.Where(Query.QueryExpressions.GetExpression());
+                int skip = Page * Query.PageCountNumber;
                 if (skip > pageQuery.Count())
                     return new List<SUser>();
 
-                return pageQuery.OrderBy(p => p.ID).Skip(skip).Take(Count).ToList();
+                return pageQuery.OrderBy(p => p.ID).Skip(skip).Take(Query.PageCountNumber).ToList();
             }
         }
 

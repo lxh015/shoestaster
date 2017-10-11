@@ -82,7 +82,7 @@ namespace St.Service
             using (var db = this.NewDB())
             {
                 var pageQuery = db.Set<T>().AsNoTracking().AsQueryable();
-                return pageQuery.Where(query.QueryExpressions).ToList();
+                return pageQuery.Where(query.QueryExpressions.GetExpression()).ToList();
                 //var pageQuery = db.Set<T>().AsNoTracking().AsQueryable();
                 //if (query.DeleteTag != 2)
                 //    pageQuery = pageQuery.Where(p => p.DeleteTag == query.DeleteTag);

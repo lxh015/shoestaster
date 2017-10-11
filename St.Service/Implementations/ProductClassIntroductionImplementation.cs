@@ -11,17 +11,17 @@ namespace St.Service.Implementations
 {
     public class ProductClassIntroductionImplementation : ServiceBase<ProductClassIntroduction>, IProductClassIntroductionInterface
     {
-        public List<ProductClassIntroduction> QueryForPage(int Page, QueryExpression<ProductClassIntroduction> Query, int Count = 15)
+        public List<ProductClassIntroduction> QueryForPage(int Page, QueryExpression<ProductClassIntroduction> Query)
         {
             using (var db = this.NewDB())
             {
                 var pageQuery = db.Set<ProductClassIntroduction>().AsNoTracking().AsQueryable();
-                pageQuery = pageQuery.Where(Query.QueryExpressions);
-                int skip = Page * Count;
+                pageQuery = pageQuery.Where(Query.QueryExpressions.GetExpression());
+                int skip = Page * Query.PageCountNumber;
                 if (skip > pageQuery.Count())
                     return new List<ProductClassIntroduction>();
 
-                return pageQuery.OrderBy(p => p.ID).Skip(skip).Take(Count).ToList();
+                return pageQuery.OrderBy(p => p.ID).Skip(skip).Take(Query.PageCountNumber).ToList();
             }
         }
 
@@ -69,7 +69,9 @@ namespace St.Service.Implementations
         {
             using (var db=base.NewDB())
             {
-                return db.Set<ProductClassIntroduction>().AsNoTracking().Include(include).Where(query.QueryExpressions).ToList();
+                return db.Set<ProductClassIntroduction>().AsNoTracking()
+                    .Include(include)
+                    .Where(query.QueryExpressions.GetExpression()).ToList();
             }
         }
     }

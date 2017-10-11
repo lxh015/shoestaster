@@ -310,6 +310,7 @@
     <Content Include="Views\Ads\AdsEidt.cshtml" />
     <Content Include="Views\SUser\SUserEidt.cshtml" />
     <Content Include="Views\Ads\test.cshtml" />
+    <Content Include="Views\Login\RegisterSuperUser.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -331,7 +332,7 @@
       <Name>St.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="..\St.Service\St.Service.csproj">
-      <Project>{0A05B829-04E1-41F1-8D15-3A714AAB83B3}</Project>
+      <Project>{0a05b829-04e1-41f1-8d15-3a714aab83b3}</Project>
       <Name>St.Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\St.Specification\St.Specification.csproj">

@@ -10,6 +10,6 @@ namespace St.Service
 {
     public interface IQueryForPage<T> where T : BaseID
     {
-        List<T> QueryForPage(int Page, QueryExpression<T> Query, int Count = 15);
+        List<T> QueryForPage(int Page, QueryExpression<T> Query);
     }
 }

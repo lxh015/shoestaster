@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseController.cs" />
+    <Compile Include="ComFunc.cs" />
     <Compile Include="Converts.cs" />
     <Compile Include="CreateWebSet.cs" />
     <Compile Include="DesHandle.cs" />
@@ -92,6 +93,10 @@
     <ProjectReference Include="..\St.Domain\St.Domain.csproj">
       <Project>{FEB69911-6FE5-4DD7-A33A-29661EEB0780}</Project>
       <Name>St.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\St.Specification\St.Specification.csproj">
+      <Project>{bd3900a6-25d4-4fa2-bb1e-893ceda2882a}</Project>
+      <Name>St.Specification</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

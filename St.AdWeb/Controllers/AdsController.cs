@@ -29,7 +29,7 @@ namespace St.AdWeb.Controllers
             try
             {
                 List<Ads> dataList = new List<Ads>();
-                Code.QueryExpression<Ads> query = new QueryExpression<Ads>(p => p.ID != 0);
+                QueryExpression<Ads> query = new QueryExpression<Ads>();
 
                 dataList = AdsService.QueryForPage(page, query);
                 if (dataList.Count == 0)
@@ -53,7 +53,7 @@ namespace St.AdWeb.Controllers
             ViewBag.Ads = null;
             if (id != 0)
             {
-                ViewBag.Ads = AdsService.GetByIDForInclude(id,"image");
+                ViewBag.Ads = AdsService.GetByIDForInclude(id, "image");
             }
 
             return View();
@@ -113,7 +113,7 @@ namespace St.AdWeb.Controllers
             return Json(_baseResult, JsonRequestBehavior.DenyGet);
         }
 
-        private bool AddAds(string title, string linkUrl, string audit, string area,string image)
+        private bool AddAds(string title, string linkUrl, string audit, string area, string image)
         {
             Ads ads = new Ads();
 
@@ -121,8 +121,8 @@ namespace St.AdWeb.Controllers
             ads.Title = title;
             ads.LinkUrl = linkUrl;
             ads.Area = (AdsArea)Convert.ToInt32(area);
-           
-            AdsService.Add(ads,image);
+
+            AdsService.Add(ads, image);
             return true;
         }
 
@@ -133,10 +133,10 @@ namespace St.AdWeb.Controllers
             ads.ID = id;
             ads.Title = title;
             ads.LinkUrl = linkUrl;
-            ads.Area = (AdsArea) Convert.ToInt32(area);
+            ads.Area = (AdsArea)Convert.ToInt32(area);
             ads.Stata = (Domain.Entity.AuditState)Convert.ToInt32(audit);
 
-            AdsService.Modify(ads,image);
+            AdsService.Modify(ads, image);
             return true;
         }
         #endregion

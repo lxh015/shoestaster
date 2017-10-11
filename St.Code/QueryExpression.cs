@@ -5,16 +5,30 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using St.Specification;
 
 namespace St.Code
 {
     public class QueryExpression<T> where T : BaseID
     {
-        public Expression<Func<T,bool>> QueryExpressions { get; private set; }
+        public ISpecification<T> QueryExpressions { get; private set; }
 
-        public QueryExpression(Expression<Func<T, bool>> expression)
+        public int PageCountNumber { get; }
+
+        public QueryExpression()
         {
-            this.QueryExpressions = expression;
+            this.QueryExpressions = new ExpressionSpecification<T>(p => p.ID != 0);
+            this.PageCountNumber = 15;
+        }
+
+        public QueryExpression(int pageCount):this()
+        {
+            this.PageCountNumber = pageCount;
+        }
+
+        public void AddExperssion(ExpressionSpecification<T> expression)
+        {
+            this.QueryExpressions = this.QueryExpressions.And(expression);
         }
     }
 }

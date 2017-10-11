@@ -2,6 +2,7 @@
 
 var Jump = new Object();
 Jump.nowPage = 0;
+Jump.queryContext = "";
 Jump.Url = "";
 Jump.hasData = false;
 Jump.GetType = "post";
@@ -33,7 +34,7 @@ Jump.ShowHtml = function (data) {
                             }
 
                             if (keytolower == "level") {
-                                item[key]= changeLevel(item[key]);
+                                item[key] = changeLevel(item[key]);
                             }
 
                             itemHtml = itemHtml.replace(replaceStr, item[key]);
@@ -76,7 +77,7 @@ Jump.GoLoad = function () {
         $.ajax({
             url: this.Url,
             type: this.GetType,
-            data: { page: this.nowPage == 0 ? 0 : (this.nowPage - 1) }
+            data: { page: this.nowPage == 0 ? 0 : (this.nowPage - 1), search: this.queryContext }
         }).done(function (data) {
             Jump.ChangePage();
             Jump.ShowHtml(data);

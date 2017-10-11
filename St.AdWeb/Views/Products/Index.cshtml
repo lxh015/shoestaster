@@ -32,7 +32,7 @@
                     <div class="col-sm-4">
                         <div id="example_filter" class="dataTables_filter">
                             <label>搜索:<input id="searchInfo" type="search" class="form-control input-sm" placeholder="" aria-controls="example"></label>
-                            <button class="btn btn-default" type="button" onclick="">查找</button>
+                            <button class="btn btn-default" type="button" onclick="searchGo()">查找</button>
                         </div>
                     </div>
                 </div>
@@ -98,7 +98,7 @@
         });
 
         Jump.nowPage = 0;
-        Jump.Url = (jumUrl == "" || jumpUrl == null || jumpUrl == undefined) ? "/Products/ProductList" : jumpUrl;
+        Jump.Url = (jumpUrl == undefined || jumUrl == "" || jumpUrl == null) ? "/Products/ProductQueryList" : jumpUrl;
         Jump.DeleteUrl = "/Products/DeleteProduct";
         Jump.ReplaceArray = ["id", "name", "minprice", "maxprice", "isshow", "stata", "id", "id", "id"];
 
@@ -132,12 +132,13 @@
         });
 
         var serachInfo = $("#searchInfo").val();
-        if (serachInfo == undefined || serachInfo == "" || serachInfo == null) {
+        if (serachInfo == undefined) {
             searchError("查找条件错误");
             return;
         }
         else {
-
+            Jump.queryContext = serachInfo;
+            Jump.GoLoad();
         }
     }
 
