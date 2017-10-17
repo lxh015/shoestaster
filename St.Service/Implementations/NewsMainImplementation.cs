@@ -40,6 +40,7 @@ namespace St.Service.Implementations
 
                         newsMain.newShow = ns;
                     }
+                    SetData(newsMain);
                     db.Entry<NewsMain>(newsMain).State = EntityState.Added;
                     db.SaveChanges();
 
@@ -90,6 +91,8 @@ namespace St.Service.Implementations
                 }
                 else
                     old.newShow.images = null;
+
+                SetData(old, DateType.Update);
                 db.Entry(old.newShow.images).State = EntityState.Unchanged;
                 db.Entry(old.newShow).State = EntityState.Modified;
                 db.Entry(old).State = EntityState.Modified;
@@ -111,7 +114,12 @@ namespace St.Service.Implementations
                 return pageQuery.OrderBy(p => p.ID).Skip(skip).Take(Query.PageCountNumber).ToList();
             }
         }
-
-
+        
+        public void SetData(NewsMain entity, DateType type = DateType.Add)
+        {
+            if (type == DateType.Add)
+                entity.AddDateTime = DateTime.Now;
+            entity.UpdateTime = DateTime.Now;
+        }
     }
 }

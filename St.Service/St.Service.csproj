@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\IDateBase.cs" />
     <Compile Include="Base\IInclude.cs" />
     <Compile Include="Base\IQueryForPage.cs" />
     <Compile Include="Base\IServiceBase.cs" />

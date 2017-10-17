@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace St.Service
 {
-    public interface IProductsInterface: IServiceBase<Products>,IQueryForPage<Products>,IInclude<Products>
+    public interface IProductsInterface: IServiceBase<Products>,IQueryForPage<Products>,IInclude<Products>,IDateBase<Products>
     {
         Products GetProductsImage(int id);
     }

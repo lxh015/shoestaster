@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace St.Service
 {
-    public interface IAdsInterface : IServiceBase<Ads>, IQueryForPage<Ads>,IInclude<Ads>
+    public interface IAdsInterface : IServiceBase<Ads>, IQueryForPage<Ads>, IInclude<Ads>, IDateBase<Ads>
     {
         void Add(Ads ads, string imageId);
 

@@ -9,7 +9,7 @@ namespace St.Domain.Entity.AD
     /// <summary>
     /// 广告类
     /// </summary>
-    public class Ads : BaseID, IAudit
+    public class Ads : BaseID, IAudit, IDate
     {
         public string LinkUrl { get; set; }
 
@@ -32,6 +32,35 @@ namespace St.Domain.Entity.AD
         }
 
         public Picture.Images image { get; set; }
+
+        private DateTime _addDateTime { get; set; }
+
+        public DateTime AddDateTime
+        {
+            get
+            {
+                return this._addDateTime;
+            }
+
+            set
+            {
+                this._addDateTime = value;
+            }
+        }
+
+        private DateTime _updateTime { get; set; }
+        public DateTime UpdateTime
+        {
+            get
+            {
+                return this._updateTime;
+            }
+
+            set
+            {
+                this._updateTime = value;
+            }
+        }
     }
 
     public enum AdsArea

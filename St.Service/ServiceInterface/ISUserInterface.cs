@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace St.Service
 {
-    public interface ISUserInterface : IServiceBase<SUser>,IQueryForPage<SUser>
+    public interface ISUserInterface : IServiceBase<SUser>,IQueryForPage<SUser>,IDateBase<SUser>
     {
         SUser UserLogin(string name,string password);
     }

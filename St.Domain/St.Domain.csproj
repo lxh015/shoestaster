@@ -52,6 +52,7 @@
     <Compile Include="Entity\AD\Ads.cs" />
     <Compile Include="Entity\BaseID.cs" />
     <Compile Include="Entity\IAudit.cs" />
+    <Compile Include="Entity\IDate.cs" />
     <Compile Include="Entity\News\NewsMain.cs" />
     <Compile Include="Entity\News\NewsShow.cs" />
     <Compile Include="Entity\Picture\Images.cs" />
@@ -82,6 +83,10 @@
     <Compile Include="Migrations\201706270900107_upproductimagevirtual.Designer.cs">
       <DependentUpon>201706270900107_upproductimagevirtual.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710170209073_UpdateTableForDataTime.cs" />
+    <Compile Include="Migrations\201710170209073_UpdateTableForDataTime.Designer.cs">
+      <DependentUpon>201710170209073_UpdateTableForDataTime.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TasterDbContext.cs" />
@@ -102,6 +107,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201706270900107_upproductimagevirtual.resx">
       <DependentUpon>201706270900107_upproductimagevirtual.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710170209073_UpdateTableForDataTime.resx">
+      <DependentUpon>201710170209073_UpdateTableForDataTime.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

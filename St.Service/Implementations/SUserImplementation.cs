@@ -60,9 +60,17 @@ namespace St.Service.Implementations
             using (var db = base.NewDB())
             {
                 user.PassWord = GetPassWord(user.Name, user.PassWord);
+                SetData(user);
                 db.Entry(user).State = System.Data.Entity.EntityState.Added;
                 db.SaveChanges();
             }
+        }
+
+        public void SetData(SUser entity, DateType type = DateType.Add)
+        {
+            if (type == DateType.Add)
+                entity.AddDateTime = DateTime.Now;
+            entity.UpdateTime = DateTime.Now;
         }
     }
 }

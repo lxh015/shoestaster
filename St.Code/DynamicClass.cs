@@ -239,7 +239,7 @@ namespace St.Code
             Type retval = myTypeBuilder.CreateType();
 
             //保存程序集，以便可以被Ildasm.exe解析，或被测试程序引用。
-            myAsmBuilder.Save(myAsmName.Name + ".dll");
+            //myAsmBuilder.Save(myAsmName.Name + ".dll");
             return retval;
         }
         #endregion

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace St.Service
 {
-    public interface INewsMainInterface : IServiceBase<NewsMain>, IQueryForPage<NewsMain>, IInclude<NewsMain>
+    public interface INewsMainInterface : IServiceBase<NewsMain>, IQueryForPage<NewsMain>, IInclude<NewsMain>,IDateBase<NewsMain>
     {
         void Add(NewsMain newsMain, string imageArray);
 

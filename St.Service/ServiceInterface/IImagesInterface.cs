@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace St.Service
 {
-    public interface IImagesInterface : IServiceBase<Images>,IQueryForPage<Images>
+    public interface IImagesInterface : IServiceBase<Images>,IQueryForPage<Images>, IDateBase<Images>
     {
     }
 }

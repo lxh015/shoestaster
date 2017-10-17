@@ -55,6 +55,7 @@ namespace St.Service.Implementations
         {
             using (var db = base.NewDB())
             {
+                SetData(entity);
                 db.Entry(entity.productClass).State = EntityState.Unchanged;
                 db.Entry(entity).State = EntityState.Added;
                 db.SaveChanges();
@@ -80,7 +81,7 @@ namespace St.Service.Implementations
                     }
                 }
                 old.productClass = db.ProductClass.Single(p => p.ID == entity.productClass.ID);
-               
+                SetData(old, DateType.Update);
                 db.Entry(old).State = EntityState.Modified;
                 db.SaveChanges();
             }
@@ -92,6 +93,13 @@ namespace St.Service.Implementations
             {
                 return db.Set<Products>().AsNoTracking().Where(p => p.ID == id).Include(p => p.productImages).Single(p => p.ID == id);
             }
+        }
+        
+        public void SetData(Products entity, DateType type = DateType.Add)
+        {
+            if (type == DateType.Add)
+                entity.AddDateTime = DateTime.Now;
+            entity.UpdateTime = DateTime.Now;
         }
     }
 }

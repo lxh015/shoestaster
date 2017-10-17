@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace St.Domain.Entity.Product
 {
-    public class Products : BaseID, IAudit
+    public class Products : BaseID, IAudit,IDate
     {
         public string Name { get; set; }
 
@@ -46,6 +46,35 @@ namespace St.Domain.Entity.Product
             set
             {
                 this._stata = value;
+            }
+        }
+
+        private DateTime _addDateTime { get; set; }
+
+        public DateTime AddDateTime
+        {
+            get
+            {
+                return this._addDateTime;
+            }
+
+            set
+            {
+                this._addDateTime = value;
+            }
+        }
+
+        private DateTime _updateTime { get; set; }
+        public DateTime UpdateTime
+        {
+            get
+            {
+                return this._updateTime;
+            }
+
+            set
+            {
+                this._updateTime = value;
             }
         }
     }
