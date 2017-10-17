@@ -17,6 +17,8 @@ namespace St.Service.Implementations
             {
                 var pageQuery = db.Set<ProductClass>().AsNoTracking().AsQueryable();
                 pageQuery = pageQuery.Where(Query.QueryExpressions.GetExpression());
+                Query.PageSumCount = pageQuery.Count();
+
                 int skip = Page * Query.PageCountNumber;
                 if (skip > pageQuery.Count())
                     return new List<ProductClass>();

@@ -13,7 +13,15 @@ namespace St.Code
     {
         public ISpecification<T> QueryExpressions { get; private set; }
 
+        /// <summary>
+        /// 每页数量
+        /// </summary>
         public int PageCountNumber { get; }
+
+        /// <summary>
+        /// 总页数
+        /// </summary>
+        public int PageSumCount { get; set; }
 
         public QueryExpression()
         {

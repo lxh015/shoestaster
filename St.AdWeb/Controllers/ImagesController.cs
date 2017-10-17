@@ -79,6 +79,8 @@ namespace St.AdWeb.Controllers
                     query.AddExperssion(new ExpressionSpecification<Images>(p => p.Title.Contains(search)));
                 
                 dataList = ImageService.QueryForPage(page, query);
+                Data.DataSumCount = Convert.ToInt32(Math.Round(Convert.ToDouble(query.PageSumCount) / Convert.ToDouble(query.PageCountNumber)));
+
                 if (dataList.Count == 0)
                     Data.SetError();
                 else

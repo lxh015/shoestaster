@@ -135,7 +135,7 @@ namespace St.AdWeb.Controllers
                     su.Name = ComFunc.GetEnglistCodeString(6);
                     su.NickName = su.Name;
                     su.isUse = true;
-                    su.Level = (Domain.Entity.LevelInfo)2;
+                    su.Level = 0;
                     su.PassWord = "123456";
                     su.Stata = (Domain.Entity.AuditState)1;
 

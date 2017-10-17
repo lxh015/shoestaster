@@ -102,9 +102,19 @@ namespace St.Code
                 this.Data = data;
             }
 
+            /// <summary>
+            /// 总页数
+            /// </summary>
+            public int DataSumCount { get; set; }
 
+            /// <summary>
+            /// 结果信息
+            /// </summary>
             public bool Result { get; set; }
 
+            /// <summary>
+            /// 结果数据组
+            /// </summary>
             public List<T> Data { get; set; }
         }
     }

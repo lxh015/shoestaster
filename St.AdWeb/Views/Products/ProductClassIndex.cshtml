@@ -57,7 +57,7 @@
                 <div class="row" style="padding:15px;padding-top:0px;">
                     <div class="col-sm-5">
                         <div class="dataTables_info" id="dataTables-example_info" role="status" aria-live="polite">
-                            @Html.Raw(string.Format("每页 {0} 行，当前第 <span id='pageNum'>{2}</span> 页，总 {1} 页", 15, pageCount,1))
+                            @Html.Raw(string.Format("每页 {0} 行，当前第 <span id='pageNum'>{2}</span> 页，总 <span id='pageSumCount'>{1}</span> 页", 15, pageCount,1))
                             <p class="text-danger">删除数据后会自动跳到当前数据页</p>
                         </div>
                     </div>

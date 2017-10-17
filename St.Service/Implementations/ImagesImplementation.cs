@@ -16,6 +16,7 @@ namespace St.Service.Implementations
             {
                 var pageQuery = db.Set<Images>().AsNoTracking().AsQueryable();
                 pageQuery = pageQuery.Where(Query.QueryExpressions.GetExpression());
+                Query.PageSumCount = pageQuery.Count();
                 int skip = Page * Count;
                 if (skip > pageQuery.Count())
                     return new List<Images>();

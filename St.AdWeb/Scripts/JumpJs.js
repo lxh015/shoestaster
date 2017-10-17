@@ -14,7 +14,7 @@ Jump.ShowHtml = function (data) {
     try {
         $("#tbody").html("");
         if (data.Result) {
-
+            $("#pageSumCount").text(data.DataSumCount);
             var addHtml = "";
             for (var i = 0; i < data.Data.length; i++) {
                 var item = data.Data[i];
@@ -58,11 +58,11 @@ Jump.ShowHtml = function (data) {
     }
 }
 Jump.Previous = function () {
-    Jump.nowPage = Jump.nowPage <= 1 ? 1 : Jump.nowPage - 1;
+    Jump.nowPage = parseInt(Jump.nowPage) <= 1 ? 1 : parseInt(Jump.nowPage) - 1;
     this.GoLoad();
 };
 Jump.Next = function () {
-    Jump.nowPage = Jump.nowPage == 0 ? 2 : Jump.nowPage + 1;
+    Jump.nowPage = parseInt(Jump.nowPage) == 0 ? 2 : parseInt(Jump.nowPage) + 1;
     this.GoLoad();
 };
 Jump.Jump = function (page) {
@@ -77,7 +77,7 @@ Jump.GoLoad = function () {
         $.ajax({
             url: this.Url,
             type: this.GetType,
-            data: { page: this.nowPage == 0 ? 0 : (this.nowPage - 1), search: this.queryContext }
+            data: { page: this.nowPage == 0 ? 0 : (parseInt(Jump.nowPage) - 1), search: this.queryContext }
         }).done(function (data) {
             Jump.ChangePage();
             Jump.ShowHtml(data);
@@ -116,6 +116,7 @@ function searchGo() {
     }
     else {
         Jump.queryContext = serachInfo;
+        Jump.nowPage = 1;
         Jump.GoLoad();
     }
 }

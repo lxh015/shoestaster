@@ -32,6 +32,8 @@ namespace St.AdWeb.Controllers
                 Code.QueryExpression<SUser> query = new QueryExpression<SUser>();
 
                 dataList = SUserService.QueryForPage(page, query);
+                Data.DataSumCount = Convert.ToInt32(Math.Round(Convert.ToDouble(query.PageSumCount) / Convert.ToDouble(query.PageCountNumber)));
+
                 if (dataList.Count == 0)
                     Data.SetError();
                 else
