@@ -109,7 +109,7 @@ namespace St.Service.Implementations
                 pageQuery = pageQuery.Where(Query.QueryExpressions.GetExpression());
                 Query.PageSumCount = pageQuery.Count();
                 int skip = Page * Query.PageCountNumber;
-                if (skip > pageQuery.Count())
+                if (skip > Query.PageSumCount)
                     return new List<NewsMain>();
 
                 return pageQuery.OrderBy(p => p.ID).Skip(skip).Take(Query.PageCountNumber).ToList();

@@ -18,7 +18,7 @@ namespace St.Service.Implementations
                 pageQuery = pageQuery.Where(Query.QueryExpressions.GetExpression());
                 Query.PageSumCount = pageQuery.Count();
                 int skip = Page * Count;
-                if (skip > pageQuery.Count())
+                if (skip > Query.PageSumCount)
                     return new List<Images>();
 
                 return pageQuery.OrderBy(p => p.ID).Skip(skip).Take(Count).ToList();

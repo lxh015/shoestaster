@@ -19,7 +19,7 @@ namespace St.Service.Implementations
                 Query.PageSumCount = pageQuery.Count();
 
                 int skip = Page * Query.PageCountNumber;
-                if (skip > pageQuery.Count())
+                if (skip > Query.PageSumCount)
                     return new List<SUser>();
 
                 return pageQuery.OrderBy(p => p.ID).Skip(skip).Take(Query.PageCountNumber).ToList();
