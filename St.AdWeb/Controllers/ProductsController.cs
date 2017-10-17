@@ -72,6 +72,7 @@ namespace St.AdWeb.Controllers
 
                 dataList = ProductService.QueryForPage(page, query);
                 Data.DataSumCount = Convert.ToInt32(Math.Round(Convert.ToDouble(query.PageSumCount) / Convert.ToDouble(query.PageCountNumber)));
+                Data.DataSumCount = Data.DataSumCount == 0 ? 1 : Data.DataSumCount;
 
                 if (dataList.Count == 0)
                     Data.SetError();
@@ -431,6 +432,7 @@ namespace St.AdWeb.Controllers
 
                 dataList = ProductClassService.QueryForPage(page, query);
                 Data.DataSumCount = Convert.ToInt32(Math.Round(Convert.ToDouble(query.PageSumCount) / Convert.ToDouble(query.PageCountNumber)));
+                Data.DataSumCount = Data.DataSumCount == 0 ? 1 : Data.DataSumCount;
 
                 if (dataList.Count == 0)
                     Data.SetError();
@@ -575,6 +577,7 @@ namespace St.AdWeb.Controllers
 
                 dataList = ProductClassIntroductionService.QueryForPage(page, query);
                 Data.DataSumCount = Convert.ToInt32(Math.Round(Convert.ToDouble(query.PageSumCount) / Convert.ToDouble(query.PageCountNumber)));
+                Data.DataSumCount = Data.DataSumCount == 0 ? 1 : Data.DataSumCount;
 
                 if (dataList.Count == 0)
                     Data.SetError();
