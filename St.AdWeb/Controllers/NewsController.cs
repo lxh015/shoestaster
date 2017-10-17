@@ -1,6 +1,7 @@
 ﻿using St.Code;
 using St.Domain.Entity.News;
 using St.Service;
+using St.Specification;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,13 +24,16 @@ namespace St.AdWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult NewsMainList(int page = 0)
+        public ActionResult NewsMainList(int page = 0, string search = "")
         {
             BaseListResult<NewsMain> Data = new BaseListResult<NewsMain>();
             try
             {
                 List<NewsMain> dataList = new List<NewsMain>();
-                Code.QueryExpression<NewsMain> query = new QueryExpression<NewsMain>();
+               QueryExpression<NewsMain> query = new QueryExpression<NewsMain>();
+
+                if (!string.IsNullOrEmpty(search))
+                    query.AddExperssion(new ExpressionSpecification<NewsMain>(p => p.Title.Contains(search)||p.Summary.Contains(search)));
 
                 dataList = NewsMainService.QueryForPage(page, query);
                 if (dataList.Count == 0)

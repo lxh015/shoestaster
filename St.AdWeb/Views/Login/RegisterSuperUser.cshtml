@@ -6,11 +6,15 @@
 
 <link href="~/Scripts/css/layui.css" rel="stylesheet" />
 @{
-        if (ViewBag.UserList != null)
+    if (ViewBag.UserList != null)
+    {
+        var dataList = ViewBag.UserList as List<St.Domain.Entity.SuperUser.SUser>;
+        if (dataList.Count == 0)
         {
-            var dataList = ViewBag.UserList as List<St.Domain.Entity.SuperUser.SUser>;
-            
-            <table class="layui-table">
+            return;
+        }
+
+        <table class="layui-table">
             <colgroup>
                 <col width="150">
                 <col width="200">
@@ -24,16 +28,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>贤心</td>
-                    <td>2016-11-29</td>
-                    <td>人生就像是一场修行</td>
-                </tr>
-                <tr>
-                    <td>许闲心</td>
-                    <td>2016-11-28</td>
-                    <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
-                </tr>
+                @foreach (var item in dataList)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.NickName</td>
+                        <td>@item.PassWord</td>
+                    </tr>
+                }
             </tbody>
         </table>
     }

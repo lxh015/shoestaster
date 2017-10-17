@@ -104,6 +104,33 @@ Jump.GoDelete = function (id) {
 }
 
 
+function searchGo() {
+    layer.load(0, {
+        shade: [0.1, '#fff']
+    });
+
+    var serachInfo = $("#searchInfo").val();
+    if (serachInfo == undefined) {
+        searchError("查找条件错误");
+        return;
+    }
+    else {
+        Jump.queryContext = serachInfo;
+        Jump.GoLoad();
+    }
+}
+
+function searchError(message) {
+    layer.msg(message, {
+        time: 0,
+        btn: ['关闭'],
+        btn1: function () {
+            layer.closeAll();
+        }
+    });
+}
+
+
 function ShowMessage(message) {
     //配置一个透明的询问框
     layer.msg(message, {

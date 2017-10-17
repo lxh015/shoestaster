@@ -1,6 +1,7 @@
 ﻿using St.Code;
 using St.Domain.Entity.AD;
 using St.Service;
+using St.Specification;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,13 +24,16 @@ namespace St.AdWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult AdsList(int page = 0)
+        public ActionResult AdsList(int page = 0, string search = "")
         {
             BaseListResult<Ads> Data = new BaseListResult<Ads>();
             try
             {
                 List<Ads> dataList = new List<Ads>();
                 QueryExpression<Ads> query = new QueryExpression<Ads>();
+
+                if (!string.IsNullOrEmpty(search))
+                    query.AddExperssion(new ExpressionSpecification<Ads>(p => p.Title.Contains(search)));
 
                 dataList = AdsService.QueryForPage(page, query);
                 if (dataList.Count == 0)

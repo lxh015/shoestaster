@@ -23,7 +23,7 @@ namespace St.AdWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult SUserList(int page = 0)
+        public ActionResult SUserList(int page = 0, string search = "")
         {
             BaseListResult<SUser> Data = new BaseListResult<SUser>();
             try

@@ -1,6 +1,7 @@
 ﻿using St.Code;
 using St.Domain.Entity.Picture;
 using St.Service;
+using St.Specification;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -66,14 +67,17 @@ namespace St.AdWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult ImageList(int page = 0)
+        public ActionResult ImageList(int page = 0, string search = "")
         {
             BaseListResult<Images> Data = new BaseListResult<Images>();
             try
             {
                 List<Images> dataList = new List<Images>();
-                Code.QueryExpression<Images> query = new QueryExpression<Images>();
+                QueryExpression<Images> query = new QueryExpression<Images>();
 
+                if (!string.IsNullOrEmpty(search))
+                    query.AddExperssion(new ExpressionSpecification<Images>(p => p.Title.Contains(search)));
+                
                 dataList = ImageService.QueryForPage(page, query);
                 if (dataList.Count == 0)
                     Data.SetError();
