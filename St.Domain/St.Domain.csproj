@@ -87,6 +87,10 @@
     <Compile Include="Migrations\201710170209073_UpdateTableForDataTime.Designer.cs">
       <DependentUpon>201710170209073_UpdateTableForDataTime.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710170850237_UpdateStateErrorMessage.cs" />
+    <Compile Include="Migrations\201710170850237_UpdateStateErrorMessage.Designer.cs">
+      <DependentUpon>201710170850237_UpdateStateErrorMessage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TasterDbContext.cs" />
@@ -110,6 +114,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710170209073_UpdateTableForDataTime.resx">
       <DependentUpon>201710170209073_UpdateTableForDataTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710170850237_UpdateStateErrorMessage.resx">
+      <DependentUpon>201710170850237_UpdateStateErrorMessage.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

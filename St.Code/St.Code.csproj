@@ -83,6 +83,7 @@
     <Compile Include="QueryExpression.cs" />
     <Compile Include="ServerUserLoginCheck.cs" />
     <Compile Include="SModel\KeyM.cs" />
+    <Compile Include="StException\DomainException.cs" />
     <Compile Include="ValueClone.cs" />
     <Compile Include="WebContextInfo.cs" />
   </ItemGroup>

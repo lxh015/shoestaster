@@ -33,12 +33,12 @@ namespace St.Code
         /// <param name="className">将要创建的类的名称。</param>
         /// <param name="lcpi">将要创建的类的属性列表。</param>
         /// <returns>返回创建的类实例</returns>
-        public static object  CreateInstance(string className, List<CustPropertyInfo> lcpi)
+        public static object CreateInstance(string className, List<CustPropertyInfo> lcpi)
         {
             Type t = SetObjectAndAddPropertyToType(className, lcpi);
             return Activator.CreateInstance(t);
         }
-        
+
         /// <summary>
         /// 根据属性列表创建类的实例，默认类名为DefaultClass，由于生成的类不是强类型，所以类名可以忽略。
         /// </summary>
@@ -230,11 +230,18 @@ namespace St.Code
             //创建TypeBuilder。
             TypeBuilder myTypeBuilder = myModBuilder.DefineType(name,
                                                             TypeAttributes.Public);
+            
+            //获取构造器信息
+            ConstructorInfo classCtorInfo = typeof(ComVisibleAttribute).GetConstructor(new Type[] { typeof(bool) });
+            //动态创建ComVisibleAttribute
+            CustomAttributeBuilder tyAttribute = new CustomAttributeBuilder(classCtorInfo, new object[] { true });
+            
+            myModBuilder.SetCustomAttribute(tyAttribute);
 
             //把lcpi中定义的属性加入到TypeBuilder。将清空其它的成员。其功能有待扩展，使其不影响其它成员。
             AddPropertyToTypeBuilder(myTypeBuilder, lcpi);
             //AddPropertyForAttribute(myTypeBuilder, lcpi);
-            
+
             //创建类型。
             Type retval = myTypeBuilder.CreateType();
 

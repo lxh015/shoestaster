@@ -76,6 +76,7 @@ namespace St.AdWeb.Controllers
                 var level = PostHttp("level");
                 var audit = PostHttp("audit");
                 var isuse = PostHttp("isuse");
+                var failedreason = PostHttp("failedreason");
 
                 if (string.IsNullOrEmpty(id) || string.IsNullOrEmpty(type) ||
                     string.IsNullOrEmpty(name) || string.IsNullOrEmpty(nickname) ||
@@ -101,13 +102,13 @@ namespace St.AdWeb.Controllers
 
                 bool result = false;
                 if (Add)
-                    result = AddSUser(name, nickname, password, audit, level, isuse);
+                    result = AddSUser(name, nickname, password, audit, level, isuse, failedreason);
                 else
-                    result = EidtSUser(ID, name, nickname, password, audit, level, isuse);
+                    result = EidtSUser(ID, name, nickname, password, audit, level, isuse, failedreason);
 
                 _baseResult.SetResult(result, "操作成功！");
             }
-            catch
+            catch(Exception ex)
             {
                 _baseResult.SetResult(false, "操作失败！");
                 goto Ret;
@@ -118,7 +119,7 @@ namespace St.AdWeb.Controllers
         }
 
         private bool AddSUser(string name, string nickname, string password, string audit,
-            string level, string isuse)
+            string level, string isuse, string failedreason)
         {
             SUser su = new SUser();
 
@@ -129,13 +130,14 @@ namespace St.AdWeb.Controllers
             su.Level = (Domain.Entity.LevelInfo)Convert.ToInt32(level);
             su.PassWord = password;
             su.Stata = (Domain.Entity.AuditState)Convert.ToInt32(audit);
+            su.FailedReason = failedreason;
 
             SUserService.Add(su);
             return true;
         }
 
         private bool EidtSUser(int id, string name, string nickname, string password, string audit,
-            string level, string isuse)
+            string level, string isuse, string failedreason)
         {
             SUser su = new SUser();
 
@@ -148,6 +150,7 @@ namespace St.AdWeb.Controllers
             su.Level = (Domain.Entity.LevelInfo)Convert.ToInt32(level);
             su.PassWord = password;
             su.Stata = (Domain.Entity.AuditState)Convert.ToInt32(audit);
+            su.FailedReason = su.Stata == Domain.Entity.AuditState.审核失败 ? failedreason : "";
 
             su.UpdateTime = DateTime.Now;
             SUserService.Modify(su);

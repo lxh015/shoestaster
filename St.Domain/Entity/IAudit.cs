@@ -9,6 +9,8 @@ namespace St.Domain.Entity
     public interface IAudit
     {
         AuditState Stata { get; set; }
+
+        string FailedReason { get; set; }
     }
 
     public enum AuditState

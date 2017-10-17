@@ -27,5 +27,18 @@ namespace St.Domain.Entity.Product
                 this._stata = value;
             }
         }
+        private string _failedReason { get; set; }
+        public string FailedReason
+        {
+            get
+            {
+                return this._failedReason;
+            }
+
+            set
+            {
+                this._failedReason = value;
+            }
+        }
     }
 }

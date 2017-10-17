@@ -1,4 +1,5 @@
-﻿using St.Domain.Entity;
+﻿
+using St.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -131,43 +132,50 @@ namespace St.Code
         /// <param name="filterContext"></param>
         protected void AuthenLevel(AuthenticationContext filterContext, params object[] webSetInfo)
         {
-            var webSet = webSetInfo == null || webSetInfo.Length == 0 ?
-                filterContext.HttpContext.Cache[webSetPath] : webSetInfo[0];
-
-            var user = GetLoginUser(filterContext.HttpContext);
-            if (user == null)
-            {
-                if (!filterContext.HttpContext.Request.Url.ToString().Contains("/Login"))
-                    filterContext.Result = new RedirectResult("/Login");
-                return;
-            }
-            int userLevel = Convert.ToInt32(user.Level);
-
-            var urlSplit = filterContext.HttpContext.Request.Url.Segments;
-            if (urlSplit.Length <= 1)
-                return;
-            var controlName = urlSplit[1].Replace("/", "");
-
-            if (controlName.Contains("Home"))
-                return;
-
-            var properties = webSet.GetType().GetProperties();
-            int level = Convert.ToInt32(LevelInfo.游客);
-
             try
             {
-                var itemProperty = properties.Single(p => p.Name.Contains(controlName));
-                level = Convert.ToInt32(itemProperty.GetValue(webSet));
-            }
-            catch (Exception ex)
-            {
-                WriteLog(LogHandle.LogEnum.LogType.operation, $"控制器操作权限异常：当前控制器名称：{controlName}；当前访问路径：{filterContext.HttpContext.Request.Url}；异常信息内容：{ex.Message}");
-            }
+                var webSet = webSetInfo == null || webSetInfo.Length == 0 ?
+               filterContext.HttpContext.Cache[webSetPath] : webSetInfo[0];
 
-            int intLevel = level;
-            int intUserLv = Convert.ToInt32(user.Level);
-            if (intLevel < intUserLv)
-                filterContext.Result = new RedirectResult("/NoLevel");
+                var user = GetLoginUser(filterContext.HttpContext);
+                if (user == null)
+                {
+                    if (!filterContext.HttpContext.Request.Url.ToString().Contains("/Login"))
+                        filterContext.Result = new RedirectResult("/Login");
+                    return;
+                }
+                int userLevel = Convert.ToInt32(user.Level);
+
+                var urlSplit = filterContext.HttpContext.Request.Url.Segments;
+                if (urlSplit.Length <= 1)
+                    return;
+                var controlName = urlSplit[1].Replace("/", "");
+
+                if (controlName.Contains("Home"))
+                    return;
+
+                var properties = webSet.GetType().GetProperties();
+                int level = Convert.ToInt32(LevelInfo.游客);
+
+                try
+                {
+                    var itemProperty = properties.Single(p => p.Name.Contains(controlName));
+                    level = Convert.ToInt32(itemProperty.GetValue(webSet));
+                }
+                catch (Exception ex)
+                {
+                    WriteLog(LogHandle.LogEnum.LogType.operation, $"控制器操作权限异常：当前控制器名称：{controlName}；当前访问路径：{filterContext.HttpContext.Request.Url}；异常信息内容：{ex.Message}");
+                }
+
+                int intLevel = level;
+                int intUserLv = Convert.ToInt32(user.Level);
+                if (intLevel < intUserLv)
+                    filterContext.Result = new RedirectResult("/NoLevel");
+            }
+            catch (Exception  ex)
+            {
+                WriteLog(LogHandle.LogEnum.LogType.error,$"权限控制出现异常:参数,{webSetInfo.Length}"+ ex.Message);
+            }
         }
 
         #endregion

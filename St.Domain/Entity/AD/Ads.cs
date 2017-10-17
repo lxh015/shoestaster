@@ -30,6 +30,20 @@ namespace St.Domain.Entity.AD
                 this._stata = value;
             }
         }
+        private string _failedReason { get; set; }
+        public string FailedReason
+        {
+            get
+            {
+                return this._failedReason;
+            }
+
+            set
+            {
+                this._failedReason = value;
+            }
+        }
+
 
         public Picture.Images image { get; set; }
 
@@ -61,6 +75,8 @@ namespace St.Domain.Entity.AD
                 this._updateTime = value;
             }
         }
+
+
     }
 
     public enum AdsArea
