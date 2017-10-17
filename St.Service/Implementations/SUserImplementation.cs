@@ -37,7 +37,7 @@ namespace St.Service.Implementations
                     if (count == 0 || count > 1)
                         return null;
 
-                    string enPassword = GetPassWord(name, password);
+                    string enPassword = GetEnDesPassWord(name, password);
                     if (userArray.First().PassWord == enPassword)
                         return userArray.First();
                     else
@@ -50,9 +50,40 @@ namespace St.Service.Implementations
             }
         }
 
-        protected string GetPassWord(string name, string password)
+        /// <summary>
+        /// 获取加密后的密码
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        protected string GetEnDesPassWord(string name, string password)
         {
             return DesHandle.EnDes($"{name}|{password}", this.desKey);
+        }
+
+        /// <summary>
+        /// 获取原密码
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        protected string GetDeDesPassWord(string name,string password)
+        {
+            string temp = DesHandle.DeDes(password, this.desKey);
+            string[] tempSplit = temp.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);
+            if (tempSplit.Length != 2)
+                throw new Exception("用户密码信息不正确，请管理员确认是否从网站注册。");
+
+            string result = string.Empty;
+            foreach (var item in tempSplit)
+            {
+                if (item == name)
+                    continue;
+
+                result = item;
+            }
+
+            return result;
         }
 
         private readonly string desKey = "11P1*2f?";
@@ -61,11 +92,24 @@ namespace St.Service.Implementations
         {
             using (var db = base.NewDB())
             {
-                user.PassWord = GetPassWord(user.Name, user.PassWord);
+                user.PassWord = GetEnDesPassWord(user.Name, user.PassWord);
                 SetData(user);
                 db.Entry(user).State = System.Data.Entity.EntityState.Added;
                 db.SaveChanges();
             }
+        }
+
+        new public void Modify(SUser user)
+        {
+            user.PassWord = GetEnDesPassWord(user.Name, user.PassWord);
+            base.Modify(user);
+        }
+
+        new public SUser GetByID(int id)
+        {
+            var temp = base.GetByID(id);
+            temp.PassWord = GetDeDesPassWord(temp.Name, temp.PassWord);
+            return temp;
         }
 
         public void SetData(SUser entity, DateType type = DateType.Add)

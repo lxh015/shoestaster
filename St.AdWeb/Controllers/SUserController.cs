@@ -139,6 +139,7 @@ namespace St.AdWeb.Controllers
         {
             SUser su = new SUser();
 
+            su = SUserService.GetByID(id);
             su.ID = id;
             su.Name = name;
             su.NickName = nickname;
@@ -148,6 +149,7 @@ namespace St.AdWeb.Controllers
             su.PassWord = password;
             su.Stata = (Domain.Entity.AuditState)Convert.ToInt32(audit);
 
+            su.UpdateTime = DateTime.Now;
             SUserService.Modify(su);
             return true;
         }

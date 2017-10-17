@@ -1,6 +1,7 @@
 ﻿using St.Code;
 using St.Domain;
 using St.Service;
+using StackExchange.Profiling;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core.Mapping;
@@ -24,8 +25,7 @@ namespace St.AdWeb
             //IOC
             Ioc.RegisterInheritedTypes(typeof(ServiceBase<>).Assembly, typeof(ServiceBase<>));
             Ioc.RegisterInheritedTypes(typeof(St.Code.LogHandle.LogHandle).Assembly, typeof(St.Code.LogHandle.LogHandle));
-
-
+            
             //EntityFramework预热
             using (var dbcontext = new TasterDbContext())
             {
@@ -33,6 +33,19 @@ namespace St.AdWeb
                 var mappingCollection = (StorageMappingItemCollection)objectContext.MetadataWorkspace.GetItemCollection(DataSpace.CSSpace);
                 mappingCollection.GenerateViews(new List<EdmSchemaError>());
             }
+        }
+
+        protected void Application_BeginRequest()
+        {
+            if (Request.IsLocal)//这里是允许本地访问启动监控,可不写
+            {
+                MiniProfiler.Start();
+            }
+        }
+
+        protected void Application_EndRequest()
+        {
+            MiniProfiler.Stop();
         }
     }
 }
