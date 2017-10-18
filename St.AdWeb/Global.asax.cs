@@ -21,7 +21,11 @@ namespace St.AdWeb
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
-
+            //ExceptionLogAttribute继承自HandleError，主要作用是将异常信息写入日志系统中
+            GlobalFilters.Filters.Add(new St.Code.StException.ExceptionHandleAttribute());
+            //默认的异常记录类
+            GlobalFilters.Filters.Add(new HandleErrorAttribute());
+            
             //IOC
             Ioc.RegisterInheritedTypes(typeof(ServiceBase<>).Assembly, typeof(ServiceBase<>));
             Ioc.RegisterInheritedTypes(typeof(St.Code.LogHandle.LogHandle).Assembly, typeof(St.Code.LogHandle.LogHandle));

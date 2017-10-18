@@ -85,6 +85,7 @@
     <Compile Include="SModel\KeyM.cs" />
     <Compile Include="StException\AppException.cs" />
     <Compile Include="StException\DomainException.cs" />
+    <Compile Include="StException\ExceptionHandle.cs" />
     <Compile Include="StException\ServiceException.cs" />
     <Compile Include="ValueClone.cs" />
     <Compile Include="WebContextInfo.cs" />
