@@ -79,8 +79,9 @@ namespace St.AdWeb.Controllers
                 else
                     Data.SetData(dataList);
             }
-            catch
+            catch(Exception ex)
             {
+                WriteLog(Code.LogHandle.LogEnum.LogType.operation, ex.Message);
                 Data.SetError();
             }
             return Json(Data, JsonRequestBehavior.DenyGet);
@@ -150,8 +151,9 @@ namespace St.AdWeb.Controllers
 
                 _baseResult.SetResult(result, "操作成功！");
             }
-            catch
+            catch(Exception ex)
             {
+                WriteLog(Code.LogHandle.LogEnum.LogType.operation, ex.Message);
                 _baseResult.SetResult(false, "操作失败！");
                 goto Ret;
             }
@@ -258,8 +260,9 @@ namespace St.AdWeb.Controllers
                 ProductService.Delete(id);
                 _baseResult.SetResult(true, "操作成功！");
             }
-            catch
+            catch(Exception ex)
             {
+                WriteLog(Code.LogHandle.LogEnum.LogType.operation, ex.Message);
                 _baseResult.SetResult(false, "操作失败！");
             }
             await RSetBaseResult();
@@ -326,8 +329,9 @@ namespace St.AdWeb.Controllers
 
                 _baseResult.SetResult(result, "操作成功！");
             }
-            catch
+            catch(Exception ex)
             {
+                WriteLog(Code.LogHandle.LogEnum.LogType.operation, ex.Message);
                 _baseResult.SetResult(false, "操作失败！");
                 goto Ret;
             }
@@ -374,8 +378,9 @@ namespace St.AdWeb.Controllers
                 ProductImageService.DeleteImage(pid, id);
                 _baseResult.SetResult(true, "操作成功！");
             }
-            catch
+            catch(Exception ex)
             {
+                WriteLog(Code.LogHandle.LogEnum.LogType.operation, ex.Message);
                 _baseResult.SetResult(false, "操作失败！");
             }
             await RSetBaseResult();
@@ -439,8 +444,9 @@ namespace St.AdWeb.Controllers
                 else
                     Data.SetData(dataList);
             }
-            catch
+            catch(Exception ex)
             {
+                WriteLog(Code.LogHandle.LogEnum.LogType.operation, ex.Message);
                 Data.SetError();
             }
             return Json(Data, JsonRequestBehavior.DenyGet);
@@ -501,8 +507,9 @@ namespace St.AdWeb.Controllers
 
                 _baseResult.SetResult(result, "操作成功！");
             }
-            catch
+            catch(Exception ex)
             {
+                WriteLog(Code.LogHandle.LogEnum.LogType.operation, ex.Message);
                 _baseResult.SetResult(false, "操作失败！");
                 goto Ret;
             }
@@ -551,8 +558,9 @@ namespace St.AdWeb.Controllers
                 ProductClassService.Delete(id);
                 _baseResult.SetResult(true, "操作成功！");
             }
-            catch
+            catch(Exception ex)
             {
+                WriteLog(Code.LogHandle.LogEnum.LogType.operation, ex.Message);
                 _baseResult.SetResult(false, "操作失败！");
             }
             await RSetBaseResult();
@@ -584,8 +592,9 @@ namespace St.AdWeb.Controllers
                 else
                     Data.SetData(dataList);
             }
-            catch
+            catch(Exception ex)
             {
+                WriteLog(Code.LogHandle.LogEnum.LogType.operation, ex.Message);
                 Data.SetError();
             }
             return Json(Data, JsonRequestBehavior.DenyGet);
@@ -648,8 +657,9 @@ namespace St.AdWeb.Controllers
 
                 _baseResult.SetResult(result, "操作成功！");
             }
-            catch
+            catch(Exception ex)
             {
+                WriteLog(Code.LogHandle.LogEnum.LogType.operation, ex.Message);
                 _baseResult.SetResult(false, "操作失败！");
                 goto Ret;
             }
@@ -688,8 +698,9 @@ namespace St.AdWeb.Controllers
                 ProductClassIntroductionService.Delete(id);
                 _baseResult.SetResult(true, "操作成功！");
             }
-            catch
+            catch(Exception ex)
             {
+                WriteLog(Code.LogHandle.LogEnum.LogType.operation, ex.Message);
                 _baseResult.SetResult(false, "操作失败！");
             }
             await RSetBaseResult();

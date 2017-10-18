@@ -95,8 +95,9 @@ namespace St.AdWeb.Controllers
                 Next:
                 return Json(message, JsonRequestBehavior.DenyGet);
             }
-            catch
+            catch(Exception ex)
             {
+                WriteLog(St.Code.LogHandle.LogEnum.LogType.operation, ex.Message);
                 message.SetMessage("", false, "登录失败！");
                 return Json(message, JsonRequestBehavior.DenyGet);
             }
